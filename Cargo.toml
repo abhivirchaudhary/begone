@@ -1,0 +1,43 @@
+[package]
+name = "begone"
+version = "0.2.0"
+edition = "2024"
+description = "say it and it's done: a fast, honest, reversible Mac disk cleaner in your terminal"
+license = "MIT"
+
+[dependencies]
+# TUI
+ratatui = "0.30"
+crossterm = "0.29"
+unicode-width = "0.2"
+
+# CLI
+clap = { version = "4", features = ["derive", "env"] }
+
+# Filesystem traversal and sizing
+dua-core = "6"
+libc = "0.2"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+plist = "1"
+
+# Errors
+thiserror = "2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["std", "NSError", "NSFileManager", "NSString", "NSURL"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+trash = "5.3"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
+
+[profile.dev]
+opt-level = 1
